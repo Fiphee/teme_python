@@ -43,6 +43,25 @@ def check_integer(user_typed=None):
     else:
         return 0
 
+
+def recursive(n, odds=0, evens=0):
+    if n == 0:
+        return n, odds, evens
+    else:
+        if n % 2 == 1:
+            odds += n
+        elif n % 2 == 0:
+            evens += n
+        results = recursive(n-1, odds, evens)
+        n += results[0] 
+        odds = results[1]  
+        evens = results[2]
+    return n, odds, evens
+    
+recursive_results = recursive(5)
+print(f'Sums: {recursive_results[0]}, Odd sums: {recursive_results[1]}, Even sums: {recursive_results[2]}')
+
+
 ###############################################
 ###  Interactive version below, call play() ###
 ###############################################
