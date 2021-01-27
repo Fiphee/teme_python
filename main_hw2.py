@@ -2,7 +2,6 @@ def get_sum(*args, **kwargs):
     my_sum = 0
     for num in args:
         num_type = type(num).__name__
-        # if isinstance(num, int) or isinstance(num, float):
         if num_type == 'int' or num_type == 'float':
             my_sum += num
     return my_sum
@@ -16,19 +15,19 @@ def sum_of_numbers_up_to(n):
 
 
 def sum_of_even_numbers_up_to(n):
-    if n % 2 == 1:
-        n -= 1
     if n == 0:
-        return 0
-    return n + sum_of_even_numbers_up_to(n-1)
+        return n
+    if n % 2 == 0:
+        return n + sum_of_even_numbers_up_to(n-2)
+    return sum_of_even_numbers_up_to(n-1)
 
 
 def sum_of_odd_numbers_up_to(n):
-    if n % 2 == 0 and n != 0:
-        n -= 1
-    elif n == 0:
-        return 0
-    return n + sum_of_odd_numbers_up_to(n-1)
+    if n <= 0:
+        return n
+    if n % 2 == 1:
+        return n + sum_of_odd_numbers_up_to(n-2)
+    return sum_of_odd_numbers_up_to(n-1)
 
 
 def check_integer(user_typed=None):
@@ -36,7 +35,9 @@ def check_integer(user_typed=None):
         user_input = input('Check if integer: ')
     else:
         user_input = user_typed
-    if user_input.isdigit():
+    if user_input == '':
+        return 0
+    elif user_input.isdigit():
         return int(user_input)
     elif user_input[0] == '-' and user_input[1:].isdigit():
         return int(user_input)
@@ -44,21 +45,20 @@ def check_integer(user_typed=None):
         return 0
 
 
-def recursive(n, odds=0, evens=0):
+def recursive(n):
     if n == 0:
-        return n, odds, evens
+        return n, 0, 0
+    results = recursive(n-1)
+    odds = results[1]
+    evens = results[2]
+    if n % 2 == 1:
+        odds += n
     else:
-        if n % 2 == 1:
-            odds += n
-        elif n % 2 == 0:
-            evens += n
-        results = recursive(n-1, odds, evens)
-        n += results[0] 
-        odds = results[1]  
-        evens = results[2]
+        evens += n
+    n += results[0] 
     return n, odds, evens
     
-recursive_results = recursive(5)
+recursive_results = recursive(10)
 print(f'Sums: {recursive_results[0]}, Odd sums: {recursive_results[1]}, Even sums: {recursive_results[2]}')
 
 
@@ -71,16 +71,16 @@ def _valid_input(get_input):
     if get_input != '0':
         check = check_integer(get_input)
         if check == 0:
-            return False
+            return [False, check]
         return [True, check]
-    return None
+    return [None, None]
 
 
 def _decision_after_validity(func, valid_num, valid_txt):
-    if valid_num == None:
+    if valid_num[0] == None:
         print("It's... 0")
         return 'stop'
-    elif not valid_num:
+    elif not valid_num[0]:
         print('Invalid number, try again')
     else:
         if valid_num[1] < 0:
@@ -157,7 +157,7 @@ def play():
                     print(typed_numbers)
                 else:
                     valid = _valid_input(typed)
-                    if not valid or valid == None:
+                    if not valid[0] or valid[0] == None:
                         try:
                             typed = float(typed)
                         except:
@@ -191,4 +191,3 @@ def play():
 # print(check_integer())
 
 play()
-
