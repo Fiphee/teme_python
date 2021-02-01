@@ -10,8 +10,7 @@ def get_sum(*args, **kwargs):
 def sum_of_numbers_up_to(n):
     if n == 0:
         return n
-    else:
-        return n + sum_of_numbers_up_to(n-1)
+    return n + sum_of_numbers_up_to(n-1)
 
 
 def sum_of_even_numbers_up_to(n):
@@ -41,8 +40,7 @@ def check_integer(user_typed=None):
         return int(user_input)
     elif user_input[0] == '-' and user_input[1:].isdigit():
         return int(user_input)
-    else:
-        return 0
+    return 0
 
 
 def recursive(n):
